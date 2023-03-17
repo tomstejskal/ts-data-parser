@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": ["ES2017", "DOM"],
+    "module": "commonjs",
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "incremental": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": false
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "src/__tests__", "**/*.test.ts", "**/*.spec.ts"]
+}
