@@ -32,6 +32,12 @@ export const fail =
     throw error(msg, ctx);
   };
 
+export const failWith =
+  <T, U>(f: (v: T) => string): Parser<T, U> =>
+  (v, ctx) => {
+    throw error(f(v), ctx);
+  };
+
 export const preCondition =
   <T, U>(
     parser: Parser<T, U>,
