@@ -194,26 +194,236 @@ console.log(xs)
 
 Changes a parser to allow `undefined` value.
 
+```ts
+import * as data form "ts-data-parser"
+
+type Foo = {
+  a: string
+  b?: boolean
+}
+
+const fooParser = data.object<Foo>({
+  a: data.string,
+  b: data.optional(data.boolean)
+})
+
+const value: unknown = { a: "hello" }
+const foo: Foo = data.runParser(fooParser, value)
+console.log(foo)
+```
+```js
+{ a: "hello" }
+```
+
 ### nullable
 
 Changes a parser to allow `null` value.
+
+```ts
+import * as data form "ts-data-parser"
+
+type Foo = {
+  a: string
+  b: boolean | null
+}
+
+const fooParser = data.object<Foo>({
+  a: data.string,
+  b: data.nullable(data.boolean)
+})
+
+const value: unknown = { a: "hello", b: null }
+const foo: Foo = data.runParser(fooParser, value)
+console.log(foo)
+```
+```js
+{ a: "hello", b: null }
+```
 
 ### withDefault
 
 Changes a parser to return some value instead of `undefined` or `null`.
 
+```ts
+import * as data form "ts-data-parser"
+
+type Foo = {
+  a: string
+  b: boolean | null
+}
+
+const fooParser = data.object<Foo>({
+  a: data.string,
+  b: data.withDefault(data.boolean, false)
+})
+
+const value: unknown = { a: "hello" }
+const foo: Foo = data.runParser(fooParser, value)
+console.log(foo)
+```
+```js
+{ a: "hello", b: false }
+```
+
 ### map
 
 Changes a parser to convert an output value using a closure.
+
+```ts
+import * as data form "ts-data-parser"
+
+const parser = data.map(data.string, (s) => Number.parseInt(s))
+
+const v: unknown = "27"
+const x: number = data.runParser(parser, value)
+console.log(x)
+```
+```js
+27
+```
 
 ### lift
 
 Converts some ordinal function `<T, U>(x: T) => U` into a parser `Parser<T, U>`.
 
+```ts
+import * as data form "ts-data-parser"
+
+const parser = data.compose(data.string, data.lift((v) => Number.parseInt(v)))
+
+const v: unknown = "27"
+const x: number = data.runParser(parser, v)
+console.log(x)
+```
+```js
+27
+```
+
 ### alt
 
 Creates a parser from alternative parsers of same type.
 It calls these parsers in sequence and returns the result of the first parser which haven't failed.
+
+```ts
+import * as data form "ts-data-parser"
+
+const parser = data.alt(
+  data.string,
+  data.number,
+  data.failWith((v) => `"${v}" is nor string neither number`)
+)
+
+const v: unknown = 27
+const x: string | number = data.runParser(parser, v)
+console.log(x)
+```
+```js
+27
+```
+
+### compose
+
+Composes two parser together.
+
+```ts
+import * as data form "ts-data-parser"
+
+const parser = data.compose(data.string, data.lift((v) => Number.parseInt(v)))
+
+const v: unknown = "27"
+const x: number = data.runParser(parser, v)
+console.log(x)
+```
+```js
+27
+```
+
+### fail
+
+Fails with an error message.
+
+```ts
+import * as data form "ts-data-parser"
+
+const parser = data.alt(
+  data.string,
+  data.number,
+  data.fail("Value is nor string neither number")
+)
+
+const v: unknown = 27
+const x: string | number = data.runParser(parser, v)
+console.log(x)
+```
+```js
+27
+```
+### failWith
+
+Fails with an error message created by closure.
+
+```ts
+import * as data form "ts-data-parser"
+
+const parser = data.alt(
+  data.string,
+  data.number,
+  data.failWith((v) => `"${v}" is nor string neither number`)
+)
+
+const v: unknown = 27
+const x: string | number = data.runParser(parser, v)
+console.log(x)
+```
+```js
+27
+```
+
+### preCondition
+
+Changes a parser to test the input value.
+
+```ts
+import * as data form "ts-data-parser"
+
+const parser = data.preCondition(
+  data.number,
+  (v) => {
+    if (v === undefined)
+      return `"${v}" cannot be undefined`
+  }
+)
+
+const v: unknown = 27
+const x: number = data.runParser(parser, v)
+console.log(x)
+```
+```js
+27
+```
+
+### postCondition
+
+Changes a parser to test the output value.
+
+```ts
+import * as data form "ts-data-parser"
+
+const parser = data.postCondition(
+  data.number,
+  (n) => {
+    if (n < 20)
+      return `"${v}" have to be higher or equal to 20`
+  }
+)
+
+const v: unknown = 27
+const x: number = data.runParser(parser, v)
+console.log(x)
+```
+```js
+27
+```
 
 ## Example
 
