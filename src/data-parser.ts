@@ -142,7 +142,7 @@ export const url = postCondition(string, (s) => {
   try {
     new URL(s);
   } catch {
-    return `Neplatná URL "${s}"`;
+    return `Invalid URL "${s}"`;
   }
 });
 
