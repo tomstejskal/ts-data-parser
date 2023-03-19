@@ -6,12 +6,13 @@
     "json",
     "validation"
   ],
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Functions to parser an unknown data into some concrete type",
   "main": "dist/index.js",
   "scripts": {
     "compile": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",

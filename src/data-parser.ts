@@ -27,15 +27,12 @@ export const error = (msg: string, ctx: ParsingCtx) => {
 };
 
 export const fail =
-  <T, U>(msg: string): Parser<T, U> =>
-  (_, ctx) => {
-    throw error(msg, ctx);
-  };
-
-export const failWith =
-  <T, U>(f: (v: T) => string): Parser<T, U> =>
+  <T, U>(msg: string | ((v: T) => string)): Parser<T, U> =>
   (v, ctx) => {
-    throw error(f(v), ctx);
+    if (msg instanceof Function) {
+      throw error(msg(v), ctx);
+    }
+    throw error(msg, ctx);
   };
 
 export const preCondition =
@@ -86,19 +83,13 @@ export const number: Parser<unknown, number> = (v, ctx) => {
   throw error(`Value ${String(v)} is not a number`, ctx);
 };
 
-export const dateTime: Parser<unknown, Moment | undefined> = compose(
-  string,
-  (v, ctx) => {
-    try {
-      const d = moment(v);
-      if (d.diff(moment("1899-12-30T00:00:00.000Z")) > 0) {
-        return d;
-      }
-    } catch {
-      throw error(`Value ${String(v)} is not a date and time`, ctx);
-    }
+export const dateTime: Parser<unknown, Moment> = compose(string, (v, ctx) => {
+  const x = moment(v);
+  if (!x.isValid()) {
+    throw error(`Value ${String(v)} is not a date and time`, ctx);
   }
-);
+  return x;
+});
 
 const isRecord = (v: unknown): v is object =>
   typeof v === "object" && v !== null && !Array.isArray(v);

@@ -9,14 +9,15 @@ This package contains a generic type `Parser<T, U>` which represents a conversio
 Converts an `unknown` value into a `string` value.
 
 ```ts
-  import * as data from "ts-data-parser"
-  
-  const v: unknown = "foo"
-  const x: string = data.runParser(data.string, v)
-  console.log(x)
+import * as data from "ts-data-parser";
+
+const v: unknown = "foo";
+const x: string = data.runParser(data.string, v);
+console.log(x);
 ```
+
 ```js
-foo
+foo;
 ```
 
 ### boolean
@@ -24,14 +25,15 @@ foo
 Converts an `unknown` value into a `boolean` value.
 
 ```ts
-import * as data from "ts-data-parser"
+import * as data from "ts-data-parser";
 
-const v: unknown = true
-const x: boolean = data.runParser(data.boolean, v)
-console.log(x)
+const v: unknown = true;
+const x: boolean = data.runParser(data.boolean, v);
+console.log(x);
 ```
+
 ```js
-true
+true;
 ```
 
 ### number
@@ -39,14 +41,15 @@ true
 Converts an `unknown` value into a `number` value.
 
 ```ts
-import * as data from "ts-data-parser"
+import * as data from "ts-data-parser";
 
-const v: unknown = 3.14
-const x: number = data.runParser(data.number, v)
-console.log(x)
+const v: unknown = 3.14;
+const x: number = data.runParser(data.number, v);
+console.log(x);
 ```
+
 ```js
-3.14
+3.14;
 ```
 
 ### constant
@@ -54,22 +57,23 @@ console.log(x)
 Ignore the input value and always return a constant value.
 
 ```ts
-import * as data from "ts-data-parser"
+import * as data from "ts-data-parser";
 
 type Foo = {
-  a: string
-  b: boolean
-}
+  a: string;
+  b: boolean;
+};
 
 const fooParser = data.object<Foo>({
   a: data.string,
-  b: data.constant(true)
-})
+  b: data.constant(true),
+});
 
-const value: unknown = { a: "some text" }
-const foo: Foo = data.runParser(fooParser, value)
-console.log(foo)
+const value: unknown = { a: "some text" };
+const foo: Foo = data.runParser(fooParser, value);
+console.log(foo);
 ```
+
 ```js
 { a: "some text", b: true }
 ```
@@ -80,22 +84,23 @@ Don't parse anything, returns the input value as is.
 Useful for example if you don't want to parse some property of object and leave it as `unknown`.
 
 ```ts
-import * as data from "ts-data-parser"
+import * as data from "ts-data-parser";
 
 type Foo = {
-  a: string
-  b: unknown
-}
+  a: string;
+  b: unknown;
+};
 
 const fooParser = data.object<Foo>({
   a: data.string,
-  b: data.identity
-})
+  b: data.identity,
+});
 
-const value: unknown = { a: "some text", b: 3.14 }
-const foo: Foo = data.runParser(fooParser, value)
-console.log(foo)
+const value: unknown = { a: "some text", b: 3.14 };
+const foo: Foo = data.runParser(fooParser, value);
+console.log(foo);
 ```
+
 ```js
 { a: "some text", b: 3.14 }
 ```
@@ -106,35 +111,37 @@ Return an `uknown` value as is, its an alias for the `identity` parser.
 Useful for example if you don't want to parse some property of object and leave it as `unknown`.
 
 ```ts
-import * as data from "ts-data-parser"
+import * as data from "ts-data-parser";
 
 type Foo = {
-  a: string
-  b: unknown
-}
+  a: string;
+  b: unknown;
+};
 
 const fooParser = data.object<Foo>({
   a: data.string,
-  b: data.unknown
-})
+  b: data.unknown,
+});
 
-const value: unknown = { a: "some text", b: 3.14 }
-const foo: Foo = data.runParser(fooParser, value)
-console.log(foo)
+const value: unknown = { a: "some text", b: 3.14 };
+const foo: Foo = data.runParser(fooParser, value);
+console.log(foo);
 ```
+
 ```js
 { a: "some text", b: 3.14 }
 ```
+
 ### dateTime
 
 Converts an `unknown` value into a `Moment` value.
 
 ```ts
-import * as data from "ts-data-parser"
-import type Moment from "moment"
+import * as data from "ts-data-parser";
+import type Moment from "moment";
 
-const v: unknown = "2023-01-01T14:00:00.000Z"
-const x: Moment = data.runParser(data.dateTime, v)
+const v: unknown = "2023-01-01T14:00:00.000Z";
+const x: Moment = data.runParser(data.dateTime, v);
 ```
 
 ## Structured data parsers
@@ -144,31 +151,32 @@ const x: Moment = data.runParser(data.dateTime, v)
 Converts an `unknown` value into some concrete object type.
 
 ```ts
-import * as data from "ts-data-parser"
+import * as data from "ts-data-parser";
 
 type Person = {
-  firstname: string
-  lastname: string
-  age: number
-  title?: string
-}
+  firstname: string;
+  lastname: string;
+  age: number;
+  title?: string;
+};
 
 const personParser = data.object<Person>({
   firstname: data.string,
   lastname: data.string,
   age: data.number,
-  title: data.optional(data.string)
-})
+  title: data.optional(data.string),
+});
 
 const value: unknown = {
   firstname: "Tom",
   lastname: "Walters",
-  age: 27
-}
+  age: 27,
+};
 
-const person = data.runParser(personParser, value)
-console.log(person)
+const person = data.runParser(personParser, value);
+console.log(person);
 ```
+
 ```js
 { firstname: "Tom", lastname: "Walters", age: 27 }
 ```
@@ -178,14 +186,15 @@ console.log(person)
 Converts an `unknown` value into an array of some type.
 
 ```ts
-import * as data from "ts-data-parser"
+import * as data from "ts-data-parser";
 
-const v: unknown = [1, 2, 3]
-const xs: Array<number> = data.array(data.number)
-console.log(xs)
+const v: unknown = [1, 2, 3];
+const xs: Array<number> = data.array(data.number);
+console.log(xs);
 ```
+
 ```js
-[1, 2, 3]
+[1, 2, 3];
 ```
 
 ## Combinator functions
@@ -211,8 +220,11 @@ const value: unknown = { a: "hello" }
 const foo: Foo = data.runParser(fooParser, value)
 console.log(foo)
 ```
+
 ```js
-{ a: "hello" }
+{
+  a: "hello";
+}
 ```
 
 ### nullable
@@ -236,6 +248,7 @@ const value: unknown = { a: "hello", b: null }
 const foo: Foo = data.runParser(fooParser, value)
 console.log(foo)
 ```
+
 ```js
 { a: "hello", b: null }
 ```
@@ -261,6 +274,7 @@ const value: unknown = { a: "hello" }
 const foo: Foo = data.runParser(fooParser, value)
 console.log(foo)
 ```
+
 ```js
 { a: "hello", b: false }
 ```
@@ -278,8 +292,9 @@ const v: unknown = "27"
 const x: number = data.runParser(parser, value)
 console.log(x)
 ```
+
 ```js
-27
+27;
 ```
 
 ### lift
@@ -295,8 +310,9 @@ const v: unknown = "27"
 const x: number = data.runParser(parser, v)
 console.log(x)
 ```
+
 ```js
-27
+27;
 ```
 
 ### alt
@@ -310,15 +326,16 @@ import * as data form "ts-data-parser"
 const parser = data.alt(
   data.string,
   data.number,
-  data.failWith((v) => `"${v}" is nor string neither number`)
+  data.fail((v) => `"${v}" is nor string neither number`)
 )
 
 const v: unknown = 27
 const x: string | number = data.runParser(parser, v)
 console.log(x)
 ```
+
 ```js
-27
+27;
 ```
 
 ### compose
@@ -334,13 +351,15 @@ const v: unknown = "27"
 const x: number = data.runParser(parser, v)
 console.log(x)
 ```
+
 ```js
-27
+27;
 ```
 
 ### fail
 
 Fails with an error message.
+Error message could be a string constant or a closure receiving input value and returning a string.
 
 ```ts
 import * as data form "ts-data-parser"
@@ -355,12 +374,10 @@ const v: unknown = 27
 const x: string | number = data.runParser(parser, v)
 console.log(x)
 ```
-```js
-27
-```
-### failWith
 
-Fails with an error message created by closure.
+```js
+27;
+```
 
 ```ts
 import * as data form "ts-data-parser"
@@ -368,15 +385,16 @@ import * as data form "ts-data-parser"
 const parser = data.alt(
   data.string,
   data.number,
-  data.failWith((v) => `"${v}" is nor string neither number`)
+  data.fail((v) => `"${v}" is nor string neither number`)
 )
 
 const v: unknown = 27
 const x: string | number = data.runParser(parser, v)
 console.log(x)
 ```
+
 ```js
-27
+27;
 ```
 
 ### preCondition
@@ -398,8 +416,9 @@ const v: unknown = 27
 const x: number = data.runParser(parser, v)
 console.log(x)
 ```
+
 ```js
-27
+27;
 ```
 
 ### postCondition
@@ -421,33 +440,34 @@ const v: unknown = 27
 const x: number = data.runParser(parser, v)
 console.log(x)
 ```
+
 ```js
-27
+27;
 ```
 
 ## Example
 
 ```ts
-import * as data from "ts-data-parser"
+import * as data from "ts-data-parser";
 
 type Person = {
-  firstname: string
-  lastname: string
-  age: number
-  title?: string
-}
+  firstname: string;
+  lastname: string;
+  age: number;
+  title?: string;
+};
 
 const personParser = data.object<Person>({
   firstname: data.string,
   lastname: data.string,
   age: data.number,
-  title: data.optional(data.string)
-})
+  title: data.optional(data.string),
+});
 
 const getPeople = async () => {
-  const response = await fetch("http://api.example.com/people")
-  const body = await response.json()
-  const people = data.runParser(data.array(personParser), body)
-  return people
-}
+  const response = await fetch("http://api.example.com/people");
+  const body = await response.json();
+  const people = data.runParser(data.array(personParser), body);
+  return people;
+};
 ```
