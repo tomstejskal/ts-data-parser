@@ -6,7 +6,7 @@
     "json",
     "validation"
   ],
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Functions to parser an unknown data into some concrete type",
   "main": "dist/index.js",
   "scripts": {
